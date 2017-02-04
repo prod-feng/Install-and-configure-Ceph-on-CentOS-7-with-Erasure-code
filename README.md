@@ -68,7 +68,7 @@ Now set the OSDs:
 >[ceph@master my-cluster]$ceph-deploy osd activate master:/dev/loop21p1 master:/dev/loop22p1 master:/dev/loop23p1 master:/dev/loop24p1 master:/dev/loop25p1 master:/dev/loop26p1 master:/dev/loop27p1 master:/dev/loop28p1 master:/dev/loop29p1
 
 
-Now, set the amin,rgw and mds service, all on local PC:
+Now, set the admin,rgw and mds service, all on local PC:
 
 > [ceph@master my-cluster]$ceph-deploy admin master
 
