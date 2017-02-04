@@ -146,7 +146,7 @@ Now I will set 2 erasure pools using the above profile:
 >[ceph@master my-cluster]$ceph osd pool create datapool 256 256 erasure myprofile
 
 
-and then, I will set 2 replicate pool as tier pools for later use to set CepfFS using the above 2 erasure pools:
+and then, I will set 2 replicate pool as tier pools for later use to set CepphFS using the above 2 erasure pools:
 
 
 
@@ -224,7 +224,7 @@ Now I can set RBD block device using my erasure pool:
 >      
 >      
 
-In the following, I will setup a CephFS using the 2 erasure pools wit 2 tier pools:
+In the following, I will setup a CephFS using the 2 erasure pools with 2 tier pools:
 > 
 > [ceph@master my-cluster]$ceph fs new cephfs mdspool datapool
 >      
