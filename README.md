@@ -89,18 +89,18 @@ Now the OSDs should have been mounted locally:
 >     
 
 >[ceph@master my-cluster]$ ceph -s
->    
->    cluster c735fc20-fe09-4815-8777-3ab7b6dd461a
->     health HEALTH_WARN
->            too few PGs per OSD (23 < min 30)
->     monmap e1: 1 mons at {master=191.168.0.9:6789/0}
->            election epoch 3, quorum 0 master
->     osdmap e74: 9 osds: 9 up, 9 in
->            flags sortbitwise,require_jewel_osds
->      pgmap v157: 104 pgs, 6 pools, 1588 bytes data, 171 objects
->            249 MB used, 4310 MB / 4559 MB avail
->                 104 active+clean
->     
+>         
+>         cluster c735fc20-fe09-4815-8777-3ab7b6dd461a
+>          health HEALTH_WARN
+>                 too few PGs per OSD (23 < min 30)
+>          monmap e1: 1 mons at {master=191.168.0.9:6789/0}
+>                 election epoch 3, quorum 0 master
+>          osdmap e74: 9 osds: 9 up, 9 in
+>                 flags sortbitwise,require_jewel_osds
+>           pgmap v157: 104 pgs, 6 pools, 1588 bytes data, 171 objects
+>                 249 MB used, 4310 MB / 4559 MB avail
+>                      104 active+clean
+>          
 
 
 
