@@ -144,15 +144,15 @@ Now the OSDs should have been mounted locally:
 Check the default erasure code profile Ceph uses:
 >
 > ceph osd erasure-code-profile get default
-> 
-> k=2
-> 
-> m=1
-> 
- >  plugin=jerasure
-> 
-> technique=reed_sol_van
-> 
+>     
+>      k=2
+>      
+>      m=1
+>      
+ >       plugin=jerasure
+>      
+>      technique=reed_sol_van
+>      
 
 I will set my own erasure code profile, named "myprofile":
 >
