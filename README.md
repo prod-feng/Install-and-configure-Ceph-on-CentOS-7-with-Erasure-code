@@ -18,16 +18,16 @@ using dd command:
 And then:
 
 
->losetup  -o 1048576  /dev/loop21 /data/users/hd21.img
+>[ceph@master my-cluster]$losetup  -o 1048576  /dev/loop21 /data/users/hd21.img
 >
 > ...
 >
->losetup  -o 1048576  /dev/loop29 /data/users/hd29.img
+>[ceph@master my-cluster]$losetup  -o 1048576  /dev/loop29 /data/users/hd29.img
 
 
 After that, running "losetup" command to check the status of these loop devices:
 
-> losetup
+> [ceph@master my-cluster]$losetup
 >     
 >     NAME        SIZELIMIT  OFFSET AUTOCLEAR RO BACK-FILE
 >     /dev/loop21         0 1048576         0  0 /data/users/hd21.img
@@ -43,43 +43,43 @@ The official doc can be found at: http://docs.ceph.com/docs/master/install/
 
 I used "ceph-deploy" to do the installation of Ceph. 
 
-> ceph-deploy new master
+> [ceph@master my-cluster]$ceph-deploy new master
 
 Here, "master" is the name of my computer. 
 Then modify the "ceph.conf" file to enable Ceph to be installed on a single node.
 
 
-> vi ceph.conf
+> [ceph@master my-cluster]$vi ceph.conf
 (to be added)
 
 Then,
   
->ceph-deploy install master
+>[ceph@master my-cluster]$ceph-deploy install master
 
->ceph-deploy mon create-initial
-
-
-
-
->ceph-deploy osd prepare master:/dev/loop21 master:/dev/loop22 master:/dev/loop23 master:/dev/loop24 master:/dev/loop25 master:/dev/loop26 master:/dev/loop27 master:/dev/loop28 master:/dev/loop29
-
-
->ceph-deploy osd activate master:/dev/loop21p1 master:/dev/loop22p1 master:/dev/loop23p1 master:/dev/loop24p1 master:/dev/loop25p1 master:/dev/loop26p1 master:/dev/loop27p1 master:/dev/loop28p1 master:/dev/loop29p1
-
-
-> ceph-deploy admin master
-
-
-> sudo chmod +r /etc/ceph/ceph.client.admin.keyring
+>[ceph@master my-cluster]$ceph-deploy mon create-initial
 
 
 
->ceph-deploy rgw create master
 
->ceph-deploy mds create master
+>[ceph@master my-cluster]$ceph-deploy osd prepare master:/dev/loop21 master:/dev/loop22 master:/dev/loop23 master:/dev/loop24 master:/dev/loop25 master:/dev/loop26 master:/dev/loop27 master:/dev/loop28 master:/dev/loop29
+
+
+>[ceph@master my-cluster]$ceph-deploy osd activate master:/dev/loop21p1 master:/dev/loop22p1 master:/dev/loop23p1 master:/dev/loop24p1 master:/dev/loop25p1 master:/dev/loop26p1 master:/dev/loop27p1 master:/dev/loop28p1 master:/dev/loop29p1
+
+
+> [ceph@master my-cluster]$ceph-deploy admin master
+
+
+> [ceph@master my-cluster]$sudo chmod +r /etc/ceph/ceph.client.admin.keyring
+
+
+
+>[ceph@master my-cluster]$ceph-deploy rgw create master
+
+>[ceph@master my-cluster]$ceph-deploy mds create master
 
 Now the OSDs should have been mounted locally:
->df -h
+>[ceph@master my-cluster]$df -h
 
 >     ...
 >     /dev/loop21p1            507M   29M  479M   6% /var/lib/ceph/osd/ceph-0
@@ -106,20 +106,20 @@ Now the OSDs should have been mounted locally:
 
 Check the default erasure code profile Ceph uses:
 >
-> ceph osd erasure-code-profile get default
+> [ceph@master my-cluster]$ceph osd erasure-code-profile get default
 >     
 >      k=2
 >      m=1
->       plugin=jerasure
+>      plugin=jerasure
 >      technique=reed_sol_van
 >      
 
 I will set my own erasure code profile, named "myprofile". Before that, I will set the ruleset to be per OSD.
 >
->ceph osd erasure-code-profile set myprofile k=6 m=3 ruleset-failure-domain=osd
+>[ceph@master my-cluster]$ceph osd erasure-code-profile set myprofile k=6 m=3 ruleset-failure-domain=osd
 >
 
->ceph osd erasure-code-profile get myprofile
+>[ceph@master my-cluster]$ceph osd erasure-code-profile get myprofile
 >     
 >     jerasure-per-chunk-alignment=false
 >     k=6
@@ -138,33 +138,33 @@ I will set my own erasure code profile, named "myprofile". Before that, I will s
 Now I will set 2 erasure pools using the above profile:
 
 
->ceph osd pool create mdspool 256 256 erasure myprofile
+>[ceph@master my-cluster]$ceph osd pool create mdspool 256 256 erasure myprofile
 >
->ceph osd pool create datapool 256 256 erasure myprofile
+>[ceph@master my-cluster]$ceph osd pool create datapool 256 256 erasure myprofile
 
 
 and then, I will set 2 replicate pool as tier pools for later use to set CepfFS using the above 2 erasure pools:
 
 
 
->ceph osd pool create bbbpool 12
+>[ceph@master my-cluster]$ceph osd pool create bbbpool 12
 >
->ceph osd pool create bbbpool 12
+>[ceph@master my-cluster]$ceph osd pool create bbbpool 12
 >
 >
-> ceph osd tier add mdspool aaapool
+>[ceph@master my-cluster]$ceph osd tier add mdspool aaapool
 >
-> ceph osd tier add datapool bbbpool
+>[ceph@master my-cluster]$ceph osd tier add datapool bbbpool
 >
-> ceph osd tier cache-mode aaapool writeback
+>[ceph@master my-cluster]$ceph osd tier cache-mode aaapool writeback
 >
->ceph osd tier cache-mode bbbpool writeback
+>[ceph@master my-cluster]$ceph osd tier cache-mode bbbpool writeback
 >
-> ceph osd tier set-overlay mdspool aaapool
+>[ceph@master my-cluster]$ceph osd tier set-overlay mdspool aaapool
 >
->ceph osd tier set-overlay  datapool bbbpool
+>[ceph@master my-cluster]$ceph osd tier set-overlay  datapool bbbpool
 >
-> ceph osd pool ls detail
+>[ceph@master my-cluster]$ceph osd pool ls detail
 > 
   
 >     
@@ -199,17 +199,17 @@ and then, I will set 2 replicate pool as tier pools for later use to set CepfFS 
 
 Now I can set RBD block device using my erasure pool:
 > 
-> rbd create --size 2G datapool/myvolume
+> [ceph@master my-cluster]$rbd create --size 2G datapool/myvolume
 > 
 
 
 
->  rbd ls datapool
+>  [ceph@master my-cluster]$rbd ls datapool
 >      
 >      myvolume
 >      
 > 
->  rbd --image datapool/myvolume info
+>  [ceph@master my-cluster]$rbd --image datapool/myvolume info
 >      
 >      rbd image 'myvolume':
 >              size 2048 MB in 512 objects
@@ -223,7 +223,7 @@ Now I can set RBD block device using my erasure pool:
 
 In the following, I will setup a CephFS using the 2 erasure pools wit 2 tier pools:
 > 
-> ceph fs new cephfs mdspool datapool
+> [ceph@master my-cluster]$ceph fs new cephfs mdspool datapool
 >      
 >      new fs with metadata pool 22 and data pool 23
 >      
@@ -232,7 +232,7 @@ In the following, I will setup a CephFS using the 2 erasure pools wit 2 tier poo
 
 Then, mount it:
 > 
-> cat ceph.client.admin.keyring
+> [ceph@master my-cluster]$cat ceph.client.admin.keyring
 >      
 >      [client.admin]
 >      
@@ -242,9 +242,9 @@ Then, mount it:
 >              caps osd = "allow *"
 >      
 
-> sudo mount -t ceph master:6789:/ /mnt/cephfs -o name=admin,secret=AQBxZotYqZjdOBAAMxNx/pbH0AaxxEJp9CXtpA==
+> [ceph@master my-cluster]$sudo mount -t ceph master:6789:/ /mnt/cephfs -o name=admin,secret=AQBxZotYqZjdOBAAMxNx/pbH0AaxxEJp9CXtpA==
 > 
->  df -h
+> [ceph@master my-cluster]$df -h
 >      
 >      Filesystem               Size  Used Avail Use% Mounted on
 >     ...
@@ -254,13 +254,13 @@ Then, mount it:
 
 Now test the CepfFS:
 > 
-> sudo mkdir /mnt/cephfs/ceph
+> [ceph@master my-cluster]$sudo mkdir /mnt/cephfs/ceph
 > 
-> sudo chown ceph:ceph /mnt/cephfs/ceph
+> [ceph@master my-cluster]$sudo chown ceph:ceph /mnt/cephfs/ceph
 > 
-> history >/mnt/cephfs/ceph/as.log
+> [ceph@master my-cluster]$history >/mnt/cephfs/ceph/as.log
 > 
-> tail /mnt/cephfs/ceph/as.log
+> [ceph@master my-cluster]$tail /mnt/cephfs/ceph/as.log
 > 
 >        837  ls -l /mnt/
 >        838  ls -l /mnt/cephfs/
