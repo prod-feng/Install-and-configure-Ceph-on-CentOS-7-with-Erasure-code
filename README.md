@@ -3,7 +3,7 @@
 The following lists the steps I used to set CephFS on a single PC, just for test purpose. I have been curious that whether 
 I can use the erasure code pool of Ceph to set a RAID-like local drive on a PC for home use.
 
-*1 Set up loop devices
+(1) Set up loop devices
 I used loop devices on my PC to set Ceph Jewel 10.2 on CentOS 7. To set the loop devices, I first set 9 1GB filse 
 using dd command:
 
@@ -36,12 +36,13 @@ After that, running "losetup" command to check the status of these loop devices:
 >     /dev/loop29         0 1048576         0  0 /data/users/hd29.img
      
      
-*2 Install and configure Ceph
+(2) Install and configure Ceph
 
 There are a lot of documents online on how to install and configure Ceph on CentOS. 
 The official doc can be found at: http://docs.ceph.com/docs/master/install/
 
-I used "ceph-deploy" to do the installation of Ceph. 
+I used "ceph-deploy" to do the installation of Ceph. Here I ignore the pre-setup steps, such as user account, networking,etc., 
+which can be found in the above link.
 
 > [ceph@master my-cluster]$ceph-deploy new master
 
