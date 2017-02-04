@@ -30,23 +30,9 @@ After that, running "losetup" command to check the status of these loop devices:
 > losetup
 >     
 >     NAME        SIZELIMIT  OFFSET AUTOCLEAR RO BACK-FILE
->     
 >     /dev/loop21         0 1048576         0  0 /data/users/hd21.img
->     
 >     /dev/loop22         0 1048576         0  0 /data/users/hd22.img
->     
->     /dev/loop23         0 1048576         0  0 /data/users/hd23.img
->     
->     /dev/loop24         0 1048576         0  0 /data/users/hd24.img
->     
->     /dev/loop25         0 1048576         0  0 /data/users/hd25.img
->     
->     /dev/loop26         0 1048576         0  0 /data/users/hd26.img
->     
->     /dev/loop27         0 1048576         0  0 /data/users/hd27.img
->     
->     /dev/loop28         0 1048576         0  0 /data/users/hd28.img
->     
+>     ...
 >     /dev/loop29         0 1048576         0  0 /data/users/hd29.img
      
      
@@ -95,25 +81,9 @@ Then,
 Now the OSDs should have been mounted locally:
 >df -h
 
->     
 >     ...
->     
 >     /dev/loop21p1            507M   29M  479M   6% /var/lib/ceph/osd/ceph-0
->     
->     /dev/loop22p1            507M   28M  479M   6% /var/lib/ceph/osd/ceph-1
->     
->     /dev/loop23p1            507M   28M  479M   6% /var/lib/ceph/osd/ceph-2
->     
->     /dev/loop24p1            507M   28M  479M   6% /var/lib/ceph/osd/ceph-3
->     
->     /dev/loop25p1            507M   28M  479M   6% /var/lib/ceph/osd/ceph-4
->     
->     /dev/loop26p1            507M   28M  480M   6% /var/lib/ceph/osd/ceph-5
->     
->     /dev/loop27p1            507M   28M  480M   6% /var/lib/ceph/osd/ceph-6
->     
->     /dev/loop28p1            507M   28M  479M   6% /var/lib/ceph/osd/ceph-7
->     
+>     ...
 >     /dev/loop29p1            507M   28M  480M   6% /var/lib/ceph/osd/ceph-8
 >     
 >     
@@ -121,25 +91,16 @@ Now the OSDs should have been mounted locally:
 >[ceph@master my-cluster]$ ceph -s
 >    
 >    cluster c735fc20-fe09-4815-8777-3ab7b6dd461a
->
 >     health HEALTH_WARN
->
 >            too few PGs per OSD (23 < min 30)
->
 >     monmap e1: 1 mons at {master=191.168.0.9:6789/0}
->
 >            election epoch 3, quorum 0 master
->
 >     osdmap e74: 9 osds: 9 up, 9 in
->
 >            flags sortbitwise,require_jewel_osds
->
 >      pgmap v157: 104 pgs, 6 pools, 1588 bytes data, 171 objects
->
 >            249 MB used, 4310 MB / 4559 MB avail
->
 >                 104 active+clean
-
+>     
 
 
 
@@ -148,11 +109,8 @@ Check the default erasure code profile Ceph uses:
 > ceph osd erasure-code-profile get default
 >     
 >      k=2
->      
 >      m=1
->      
- >       plugin=jerasure
->      
+>       plugin=jerasure
 >      technique=reed_sol_van
 >      
 
@@ -164,19 +122,12 @@ I will set my own erasure code profile, named "myprofile". Before that, I will s
 >ceph osd erasure-code-profile get myprofile
 >     
 >     jerasure-per-chunk-alignment=false
->     
 >     k=6
->     
 >     m=3
->     
 >     plugin=jerasure
->     
 >     ruleset-failure-domain=osd
->     
 >     ruleset-root=default
->     
 >     technique=reed_sol_van
->     
 >     w=8
 >     
 
@@ -218,7 +169,7 @@ and then, I will set 2 replicate pool as tier pools for later use to set CepfFS 
   
 >     
 
->       pool 0 'rbd' replicated size 2 min_size 1 crush_ruleset 0 object_hash rjenkins pg_num 256 pgp_num 256 last_change 77 flags hashpspool stripe_width 0
+>      pool 0 'rbd' replicated size 2 min_size 1 crush_ruleset 0 object_hash rjenkins pg_num 256 pgp_num 256 last_change 77 flags hashpspool stripe_width 0
 >      
 >      pool 1 '.rgw.root' replicated size 2 min_size 1 crush_ruleset 0 object_hash rjenkins pg_num 8 pgp_num 8 last_change 55 owner 18446744073709551615 flags hashpspool stripe_width 0
 >      
@@ -261,17 +212,11 @@ Now I can set RBD block device using my erasure pool:
 >  rbd --image datapool/myvolume info
 >      
 >      rbd image 'myvolume':
->      
 >              size 2048 MB in 512 objects
->      
 >              order 22 (4096 kB objects)
->      
 >              block_name_prefix: rbd_data.11742ae8944a
->      
 >              format: 2
->      
 >              features: layering, exclusive-lock, object-map, fast-diff, deep-flatten
->      
 >              flags:
 >      
 >      
@@ -292,13 +237,9 @@ Then, mount it:
 >      [client.admin]
 >      
 >              key = AQBxZotYqZjdOBAAMxNx/pbH0AaxxEJp9CXtpA==
->      
 >              caps mds = "allow *"
->      
 >              caps mon = "allow *"
->      
 >              caps osd = "allow *"
->      
 >      
 
 > sudo mount -t ceph master:6789:/ /mnt/cephfs -o name=admin,secret=AQBxZotYqZjdOBAAMxNx/pbH0AaxxEJp9CXtpA==
@@ -306,11 +247,8 @@ Then, mount it:
 >  df -h
 >      
 >      Filesystem               Size  Used Avail Use% Mounted on
->      
 >     ...
->     
 >      /dev/loop29p1            507M   33M  475M   7% /var/lib/ceph/osd/ceph-8
->      
 >      192.168.0.9:6789:/     4.5G  308M  4.2G   7% /mnt/cephfs
 >      
 
@@ -324,24 +262,11 @@ Now test the CepfFS:
 > 
 > tail /mnt/cephfs/ceph/as.log
 > 
->        833  cat ceph.client.admin.keyring
->      
->        834  sudo mount -t ceph master:6789:/ /mnt/cephfs -o name=admin,secret=AQBxZotYqZjdOBAAMxNx/pbH0AaxxEJp9CXtpA==
->      
->        835  df -h
->      
->        836  history >/mnt/cephfs/as.log
->      
 >        837  ls -l /mnt/
->      
 >        838  ls -l /mnt/cephfs/
->      
 >        839  mkdir /mnt/cephfs/ceph
->      
 >        840  sudo mkdir /mnt/cephfs/ceph
->      
 >        841  sudo chown ceph:ceph /mnt/cephfs/ceph
->      
 >        842  history >/mnt/cephfs/ceph/as.log
 >     
 
