@@ -117,7 +117,7 @@ Now the OSDs should have been mounted locally:
 
 >
 >[ceph@master my-cluster]$ ceph -s
->
+>    
 >    cluster c735fc20-fe09-4815-8777-3ab7b6dd461a
 >
 >     health HEALTH_WARN
@@ -143,16 +143,16 @@ Now the OSDs should have been mounted locally:
 
 Check the default erasure code profile Ceph uses:
 >
->[ceph@master my-cluster]$ ceph osd erasure-code-profile get default
->
->k=2
->
->m=1
->
->plugin=jerasure
->
->technique=reed_sol_van
->
+> ceph osd erasure-code-profile get default
+> 
+> k=2
+> 
+> m=1
+> 
+ >  plugin=jerasure
+> 
+> technique=reed_sol_van
+> 
 
 I will set my own erasure code profile, named "myprofile":
 >
