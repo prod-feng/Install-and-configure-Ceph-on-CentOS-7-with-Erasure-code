@@ -124,7 +124,7 @@ Now the OSDs should have been mounted locally:
 >
 >            too few PGs per OSD (23 < min 30)
 >
->     monmap e1: 1 mons at {master=129.49.83.218:6789/0}
+>     monmap e1: 1 mons at {master=191.168.0.9:6789/0}
 >
 >            election epoch 3, quorum 0 master
 >
