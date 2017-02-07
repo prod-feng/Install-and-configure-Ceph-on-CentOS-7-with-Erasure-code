@@ -51,8 +51,15 @@ Then modify the "ceph.conf" file to enable Ceph to be installed on a single node
 
 
 > [ceph@master my-cluster]$vi ceph.conf
-(to be added)
 
+Here one need to add 3 lines of configuration:
+>     
+>     osd journal size = 512 set it to 512MB.
+>     osd pool default size = 2
+>     osd crush chooseleaf type = 0
+>     
+
+The default OSD journal size is 5GB, here osd journal size = 512 set it to 512MB.
 Then,
   
 >[ceph@master my-cluster]$ceph-deploy install master
